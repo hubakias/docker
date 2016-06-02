@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/java -Dhttp.proxyHost="$http_proxy_host" -Dhttp.proxyPort="$http_proxy_port" -Dhttps.proxyHost="$https_proxy_host" -Dhttps.proxyPort="$https_proxy_port" "$@"
