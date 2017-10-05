@@ -1,5 +1,22 @@
-# Update all images (super simple, supposing all images come from the official docker registry)
-for i in $(docker images | tail -n +2 | awk '{print $1}' | egrep -v "^<none>" ) ; do docker pull $i ; done
+#!/bin/bash
 
-# Remove everything not linked to a container (running or not)
-for i in $(docker images | egrep "^<none>" | awk '{print $3}') ; do docker rmi $i ; done
+#Remove stale images
+if [ "$(which docker)" ]; then
+
+  stale="$(docker rmi $(docker images -f "dangling=true" -q) 2>/dev/null)"
+
+  if [ "${stale}" ]; then
+
+    docker rmi ${stale}
+
+  fi
+
+  # Remove everything not linked to a container (running or not)
+  for i in $(docker images | egrep "^<none>" | awk '{print $3}') ; do
+
+    docker rmi $i
+
+  done
+
+fi
+
